@@ -9,12 +9,20 @@ import {App} from '@capacitor/app'
 })
 export class AppComponent implements OnInit {
   isLoading = true;
-  text = 'loading...';
+  text = 'click to update';
   version = {version: ''};
+
   constructor(private zone: NgZone) {
   }
 
   ngOnInit() {
+    //
+    //
+    //
+
+  }
+
+  updateApp() {
     this.zone.run(() => {
       App.addListener('appStateChange', async (state) => {
         if (state.isActive) {
@@ -23,7 +31,7 @@ export class AppComponent implements OnInit {
           this.isLoading = true;
           this.version = await CapacitorUpdater.download({
             // url: 'https://github.com/Forgr-ee/Mimesis/releases/download/0.0.1/dist.zip',
-            url: 'https://github.com/SergioZhydecky/appflow-test/raw/master/0.0.1/dist.zip',
+            url: 'https://github.com/SergioZhydecky/appflow-test/raw/master/0.0.1/www.zip',
           });
           this.isLoading = false;
         }
@@ -34,13 +42,15 @@ export class AppComponent implements OnInit {
           this.isLoading = true;
           try {
             await CapacitorUpdater.set(this.version);
+            this.isLoading = false;
+            alert('ok');
           } catch (er) {
+            console.log(er);
             this.isLoading = false;
             // SplashScreen.hide() // in case the set fail, otherwise the new app will have to hide it
           }
         }
       });
     });
-
   }
 }

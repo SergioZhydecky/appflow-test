@@ -1,4 +1,4 @@
 <ion-app>
-  <div *ngIf="isLoading" style="position: absolute; top: 50px; left: 50px; background-color: red; z-index: 100000; font-size: 18px">initing...</div>
+  <div *ngIf="isLoading" (click)="updateApp()" style="position: absolute; top: 50px; left: 50px; background-color: red; z-index: 100000; font-size: 18px">{{text}}</div>
   <ion-router-outlet></ion-router-outlet>
 </ion-app>
