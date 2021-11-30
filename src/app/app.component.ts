@@ -1,4 +1,4 @@
-import {Component, NgZone, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, NgZone, OnInit} from '@angular/core';
 import {CapacitorUpdater} from 'capacitor-updater'
 import {App} from '@capacitor/app'
 
@@ -12,43 +12,45 @@ export class AppComponent implements OnInit {
   text = 'click to update';
   version = {version: ''};
 
-  constructor(private zone: NgZone) {
+  constructor(
+    private zone: NgZone,
+    private cdRef: ChangeDetectorRef
+    ) {
   }
 
   ngOnInit() {
-    //
-    //
-    //
-
+    this.updateApp();
   }
 
   updateApp() {
     this.zone.run(() => {
       App.addListener('appStateChange', async (state) => {
         if (state.isActive) {
-          // Do the download during user active app time to prevent failed download
           this.text = 'loading...';
           this.isLoading = true;
-          this.version = await CapacitorUpdater.download({
-            // url: 'https://github.com/Forgr-ee/Mimesis/releases/download/0.0.1/dist.zip',
+          this.cdRef.detectChanges();
+          CapacitorUpdater.download({
             url: 'https://github.com/SergioZhydecky/appflow-test/raw/master/0.0.1/www.zip',
+          }).then((ver) => {
+            this.version = ver;
+            this.isLoading = false;
+            this.cdRef.detectChanges();
+            if (this.version.version !== '') {
+              this.text = 'updating...';
+              this.isLoading = true;
+              this.cdRef.detectChanges();
+              try {
+                CapacitorUpdater.set(this.version).then(val => {
+                  this.isLoading = false;
+                }).catch(err => {
+                  console.log(err);
+                });
+              } catch (er) {
+                console.log(er);
+                this.isLoading = false;
+              }
+            }
           });
-          this.isLoading = false;
-        }
-        if (!state.isActive && this.version.version !== '') {
-          // Do the switch when user leave app
-          // SplashScreen.show()
-          this.text = 'updating...';
-          this.isLoading = true;
-          try {
-            await CapacitorUpdater.set(this.version);
-            this.isLoading = false;
-            alert('ok');
-          } catch (er) {
-            console.log(er);
-            this.isLoading = false;
-            // SplashScreen.hide() // in case the set fail, otherwise the new app will have to hide it
-          }
         }
       });
     });
