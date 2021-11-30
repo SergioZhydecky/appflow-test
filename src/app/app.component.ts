@@ -22,7 +22,8 @@ export class AppComponent implements OnInit {
           this.text = 'loading...';
           this.isLoading = true;
           this.version = await CapacitorUpdater.download({
-            url: 'https://github.com/Forgr-ee/Mimesis/releases/download/0.0.1/dist.zip',
+            // url: 'https://github.com/Forgr-ee/Mimesis/releases/download/0.0.1/dist.zip',
+            url: 'https://github.com/SergioZhydecky/appflow-test/raw/master/0.0.1/dist.zip',
           });
           this.isLoading = false;
         }
