@@ -36,7 +36,7 @@
     "@ionic-native/camera": "^5.36.0",
     "@ionic/angular": "^5.5.2",
     "capacitor-codepush": "git+https://github.com/mapiacompany/capacitor-codepush.git",
-    "capacitor-updater": "^1.0.16",
+    "capacitor-updater": "file:../../plugins/capacitor-updater",
     "cordova-plugin-camera": "^6.0.0",
     "cordova-plugin-ionic": "5.5.1",
     "rxjs": "~6.6.0",
